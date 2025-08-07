@@ -15,4 +15,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="glsl Shaders\**" />
+    <EmbeddedResource Remove="glsl Shaders\**" />
+    <None Remove="glsl Shaders\**" />
+  </ItemGroup>
 </Project>

@@ -5,9 +5,10 @@ using OpenTK.Mathematics;
 
 namespace GLSLShaderLab
 {
-    public class Shader
+    public class Shader : IDisposable
     {
         public int Handle;
+        private bool _disposed = false;
 
         public Shader(string vertexPath, string fragmentPath)
         {
@@ -17,17 +18,27 @@ namespace GLSLShaderLab
             int vertex = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(vertex, vertexCode);
             GL.CompileShader(vertex);
-            Console.WriteLine(GL.GetShaderInfoLog(vertex));
+            
+            string vertexLog = GL.GetShaderInfoLog(vertex);
+            if (!string.IsNullOrEmpty(vertexLog))
+                Console.WriteLine($"Vertex Shader Log: {vertexLog}");
 
             int fragment = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(fragment, fragmentCode);
             GL.CompileShader(fragment);
-            Console.WriteLine(GL.GetShaderInfoLog(fragment));
+            
+            string fragmentLog = GL.GetShaderInfoLog(fragment);
+            if (!string.IsNullOrEmpty(fragmentLog))
+                Console.WriteLine($"Fragment Shader Log: {fragmentLog}");
 
             Handle = GL.CreateProgram();
             GL.AttachShader(Handle, vertex);
             GL.AttachShader(Handle, fragment);
             GL.LinkProgram(Handle);
+            
+            string programLog = GL.GetProgramInfoLog(Handle);
+            if (!string.IsNullOrEmpty(programLog))
+                Console.WriteLine($"Program Log: {programLog}");
 
             GL.DetachShader(Handle, vertex);
             GL.DetachShader(Handle, fragment);
@@ -42,5 +53,31 @@ namespace GLSLShaderLab
 
         public void SetVector2(string name, Vector2 value) =>
             GL.Uniform2(GL.GetUniformLocation(Handle, name), value);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    GL.DeleteProgram(Handle);
+                }
+                _disposed = true;
+            }
+        }
+
+        ~Shader()
+        {
+            if (!_disposed)
+            {
+                Console.WriteLine("GPU Resource leak! Shader was not disposed properly.");
+            }
+        }
     }
 }

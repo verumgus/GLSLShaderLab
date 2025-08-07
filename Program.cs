@@ -6,9 +6,19 @@ namespace GLSLShaderLab
     {
         static void Main(string[] args)
         {
-            using (var window = new Window(800, 600, "GLSL Shader Lab"))
+            var shaderSelector = new ShaderSelector();
+            var selectedShader = shaderSelector.SelectShader();
+            
+            if (selectedShader != null)
             {
-                window.Run();
+                using (var window = new Window(800, 600, "GLSL Shader Lab", selectedShader))
+                {
+                    window.Run();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhum shader selecionado. Encerrando programa.");
             }
         }
     }
