@@ -75,6 +75,24 @@ void main()
     vec3 color = vec3(circle) * (0.5 + 0.5 * sin(iTime));
     FragColor = vec4(color, 1.0);
 }
+## 🔌 Extensões Recomendadas para Visual Studio
+
+Para melhorar a experiência de programação de shaders, recomendamos instalar as seguintes extensões:
+
+- **GLSL Language Integration** - Syntax highlighting para GLSL (arquivos `.vert`, `.frag`, `.geom`, `.comp`)
+- **Shader Tools for Visual Studio** - Suporte ampliado para múltiplos tipos de shader
+
+### Como Instalar
+1. Vá em **Extensões > Gerenciar Extensões**
+2. Procure por "shader", "GLSL"
+3. Instale as extensões desejadas
+4. Reinicie o Visual Studio
+
+### Ferramentas Alternativas
+- **Shadertoy** (online) - Ótimo para prototipagem rápida de fragment shaders
+- **RenderDoc** - Para debugging avançado de aplicações gráficas
+- **VS Code** com extensões GLSL - Alternativa leve ao Visual Studio
+
 ## 🎯 Dicas para Estudantes
 
 1. **Comece simples** - Modifique os shaders existentes antes de criar novos
@@ -82,6 +100,7 @@ void main()
 3. **Normalize coordenadas** com `gl_FragCoord.xy / iResolution.xy`
 4. **Experimente funções** como `sin()`, `cos()`, `smoothstep()`, `mix()`
 5. **Use cores HSV** para transições de cor mais suaves
+6. **Instale extensões** para melhorar o syntax highlighting e detecção de erros
 
 ## 🔧 Requisitos
 
