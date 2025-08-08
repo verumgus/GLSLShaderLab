@@ -54,6 +54,12 @@ namespace GLSLShaderLab
         public void SetVector2(string name, Vector2 value) =>
             GL.Uniform2(GL.GetUniformLocation(Handle, name), value);
 
+        public void SetVector3(string name, Vector3 value) =>
+            GL.Uniform3(GL.GetUniformLocation(Handle, name), value);
+
+        public void SetMatrix4(string name, Matrix4 value) =>
+            GL.UniformMatrix4(GL.GetUniformLocation(Handle, name), false, ref value);
+
         public void Dispose()
         {
             Dispose(true);
