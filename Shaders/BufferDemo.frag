@@ -22,12 +22,12 @@ vec3 fractalPattern(vec2 uv, float time) {
     
     for(int i = 0; i < 6; i++) {
         float fi = float(i);
-        p += 0.5 * sin(p.yx * (2.0 + fi) + time * (0.5 + fi * 0.2));
+        p += 0.5 * sin(p.yx * (6.0 + fi) + time * (1.5 + fi * 0.2));
         color += 0.2 * cos(p.x + p.y + time + fi);
     }
     
     return color;
-}
+}//gerador de formas
 
 // Function to apply blur using neighbor samples
 vec4 applyBlur(sampler2D tex, vec2 uv, float intensity) {
@@ -65,7 +65,7 @@ void main() {
     vec3 newContent = fractalPattern(uv, iTime);
     
     // Add particles near mouse
-    float mouseInfluence = 1.0 - smoothstep(0.0, 0.3, distance(uv, mouseNorm));
+    float mouseInfluence = 1.0 - smoothstep(0.1, 0.3, distance(uv, mouseNorm));
     newContent += mouseInfluence * vec3(1.0, 0.5, 0.2) * sin(iTime * 10.0);
     
     // Mix with previous frame to create trails
