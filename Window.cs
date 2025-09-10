@@ -27,7 +27,7 @@ namespace GLSLShaderLab
         {
             _selectedShader = selectedShader;
             
-            // Carregar lista de shaders disponíveis
+            // Carregar lista de shaders disponï¿½veis
             var selector = new ShaderSelector();
             _availableShaders = selector.GetAvailableShaders();
             _currentShaderIndex = _availableShaders.FindIndex(s => s.Name == selectedShader.Name);
@@ -102,7 +102,8 @@ namespace GLSLShaderLab
                     shaderInfo.Name.Contains("BufferDemo") || 
                     shaderInfo.Name.Contains("BufferTest") ||
                     shaderInfo.Name.Contains("SimplePaint") ||
-                    shaderInfo.Name.Contains("Functions"))
+                    shaderInfo.Name.Contains("Functions")
+                    )
                 {
                     if (!_useBuffers)
                     {
