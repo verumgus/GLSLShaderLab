@@ -264,6 +264,21 @@ namespace GLSLShaderLab
                 SetCommonUniforms(_shader);
 
                 if (_renderMode == RenderMode.Fullscreen2D)
+                {
+                    if (_useBuffers)
+                        RenderWithBuffers2D();
+                    else
+                        RenderDirect();
+                }
+                else
+                {
+                    if (_useBuffers)
+                        RenderWithBuffers3D();
+                    else
+                        RenderDirect();
+                }
+
+                if (_renderMode == RenderMode.Fullscreen2D)
                     RenderDirect();
                 else
                 {
@@ -278,6 +293,74 @@ namespace GLSLShaderLab
             }
 
             SwapBuffers();
+        }
+        private void RenderWithBuffers2D()
+        {
+            _bufferManager.BindCurrentBufferForWriting();
+
+            _shader?.Use();
+            SetCommonUniforms(_shader);
+
+            // Bind previous frame como iChannel0
+            _bufferManager.BindBuffersForReading(_shader);
+
+            // Renderiza quad fullscreen
+            GL.BindVertexArray(_vao);
+            GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+
+            _bufferManager.UnbindBuffers();
+
+            // Copia para tela com copy shader
+            GL.Viewport(0, 0, Size.X, Size.Y);
+            if (_copyShader != null)
+            {
+                _copyShader.Use();
+                _copyShader.SetVector2("iResolution", new Vector2(Size.X, Size.Y));
+                var currentBuffer = _bufferManager.GetCurrentBuffer();
+                currentBuffer.BindForReading(TextureUnit.Texture0);
+                _copyShader.SetTexture("inputTexture", 0);
+
+                GL.BindVertexArray(_vao);
+                GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+            }
+
+            _bufferManager.SwapBuffers();
+        }
+
+        private void RenderWithBuffers3D()
+        {
+            _bufferManager.BindCurrentBufferForWriting();
+
+            _shader?.Use();
+            SetCommonUniforms(_shader);
+
+            var model = Matrix4.CreateRotationY(MathHelper.DegreesToRadians(_rotationY));
+            var view = Matrix4.LookAt(_cameraPos, _cameraPos + _cameraFront, _cameraUp);
+            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(_fov), Size.X / (float)Size.Y, 0.1f, 100.0f);
+
+            _bufferManager.BindBuffersForReading(_shader);
+
+            _shader.SetMatrix4("model", model);
+            _shader.SetMatrix4("view", view);
+            _shader.SetMatrix4("projection", projection);
+            _model?.Render();
+
+            _bufferManager.UnbindBuffers();
+
+            GL.Viewport(0, 0, Size.X, Size.Y);
+            if (_copyShader != null)
+            {
+                _copyShader.Use();
+                _copyShader.SetVector2("iResolution", new Vector2(Size.X, Size.Y));
+                var currentBuffer = _bufferManager.GetCurrentBuffer();
+                currentBuffer.BindForReading(TextureUnit.Texture0);
+                _copyShader.SetTexture("inputTexture", 0);
+
+                GL.BindVertexArray(_vao);
+                GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+            }
+
+            _bufferManager.SwapBuffers();
         }
 
         private void RenderDirect()
