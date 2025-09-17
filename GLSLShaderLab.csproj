@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.7.6" />
+    <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Shaders\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mesh\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
