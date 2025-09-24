@@ -10,8 +10,12 @@ uniform float iTime;
 uniform vec2 iResolution;
 uniform vec3 viewPos;
 
+vec3 lightDir = vec3(0.45,1.0,0.0);// ROt, UP DOWN, Power;
+
 void main()
 {
-    
-    FragColor = vec4(1.0,1.0,1.0,1.0);
+    float brightness = dot(Normal, lightDir);
+    float darkness = clamp(dot(Normal,-lightDir),0,1) ;
+
+    FragColor = vec4(1.0,1.0,1.0,1.0)*darkness;
 }
